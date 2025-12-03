@@ -4,13 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import Investigador.Investigador;
 
+
 public class Laboratorio {
-    private static int contadorID = 1;  // Contador para gerar IDs automaticamente
+
+    private static int contadorID = 1;  // Geração automática de IDs
     private int id;
     private String nome;
     private String localizacao;
-    private List<Investigador> investigadores;  // Lista de investigadores que pertencem ao laboratório
-    private int numeroProjetosAtivos;  // Número de projetos em que o laboratório está envolvido
+    private List<Investigador> investigadores;  
+    private int numeroProjetosAtivos;
 
     // Construtor com validações
     public Laboratorio(String nome, String localizacao) {
@@ -28,17 +30,17 @@ public class Laboratorio {
         this.numeroProjetosAtivos = 0;
     }
 
-    // Validação de nome (não pode ser vazio)
+    // Validação de nome
     private boolean validarNome(String nome) {
         return nome != null && !nome.trim().isEmpty();
     }
 
-    // Validação de localização (não pode ser vazio)
+    // Validação de localização
     private boolean validarLocalizacao(String localizacao) {
         return localizacao != null && !localizacao.trim().isEmpty();
     }
 
-    // Métodos Getters
+    // Getters
     public int getId() {
         return id;
     }
@@ -52,17 +54,17 @@ public class Laboratorio {
     }
 
     public List<Investigador> getInvestigadores() {
-        return investigadores;
+        return new ArrayList<>(investigadores);
     }
 
     public int getNumeroProjetosAtivos() {
         return numeroProjetosAtivos;
     }
 
-    // Métodos Setters
+    // Setters
     public void setNome(String nome) {
         if (!validarNome(nome)) {
-            throw new IllegalArgumentException("Nome do laboratório inválido.");
+            throw new IllegalArgumentException("Nome inválido.");
         }
         this.nome = nome;
     }
@@ -74,7 +76,7 @@ public class Laboratorio {
         this.localizacao = localizacao;
     }
 
-    // Adiciona um investigador ao laboratório
+    // Adicionar investigador ao laboratório
     public void adicionarInvestigador(Investigador investigador) {
         if (investigador == null) {
             throw new IllegalArgumentException("Investigador inválido.");
@@ -82,7 +84,7 @@ public class Laboratorio {
         investigadores.add(investigador);
     }
 
-    // Remove um investigador do laboratório
+    // Remover investigador
     public void removerInvestigador(Investigador investigador) {
         if (investigador == null) {
             throw new IllegalArgumentException("Investigador inválido.");
@@ -90,32 +92,36 @@ public class Laboratorio {
         investigadores.remove(investigador);
     }
 
-    // Adiciona um projeto ativo ao laboratório
+    // Incrementar projetos ativos
     public void adicionarProjetoAtivo() {
         numeroProjetosAtivos++;
     }
 
-    // Remove um projeto ativo do laboratório
+    // Remover projeto ativo
     public void removerProjetoAtivo() {
         if (numeroProjetosAtivos > 0) {
             numeroProjetosAtivos--;
         } else {
-            throw new IllegalStateException("Não há projetos ativos para remover.");
+            throw new IllegalStateException("Nenhum projeto ativo para remover.");
         }
     }
 
-    // Exibir os dados do laboratório
+    // Exibir dados do laboratório
     public void exibirDados() {
         System.out.println("ID do Laboratório: " + id);
         System.out.println("Nome do Laboratório: " + nome);
         System.out.println("Localização: " + localizacao);
-        System.out.println("Número de Projetos Ativos: " + numeroProjetosAtivos);
-        System.out.println("Investigadores no Laboratório:");
+        System.out.println("Projetos Ativos: " + numeroProjetosAtivos);
+        System.out.println("Investigadores:");
+
         if (investigadores.isEmpty()) {
-            System.out.println("Nenhum investigador registrado.");
+            System.out.println("Nenhum investigador registado.");
         } else {
-            for (Investigador i : investigadores) {
-                System.out.println("- " + i.getNome());
+            for (Investigador inv : investigadores) {
+             System.out.println("- " + inv.getNome());
+            
+            
+
             }
         }
     }

@@ -95,6 +95,11 @@ public class Projeto {
                 "\n Equipa = " + equipaInvestigadores +
                 "\n}";
     }
+
+    public String getProjetoAssociado() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getProjetoAssociado'");
+    }
 }
     
 

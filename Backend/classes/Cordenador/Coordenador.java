@@ -1,4 +1,4 @@
-package Coordenador;
+package Cordenador;
 
 import java.io.Serializable;  // Importar a interface Serializable
 
