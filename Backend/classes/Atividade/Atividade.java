@@ -1,8 +1,13 @@
 package Atividade;
 
+import java.io.Serializable;
 import java.util.Date;
+import Projeto.Projeto;
+import Investigador.Investigador;
 
-public class Atividade {
+public class Atividade implements Serializable {
+
+    private static final long serialVersionUID = 1L; // Adicionando serialVersionUID para controle de versão
 
     private int idAtividade;
     private Projeto projetoAssociado;
@@ -10,7 +15,6 @@ public class Atividade {
     private String tipoAtividade;
     private Date data;
     private double duracao;
-
 
     public Atividade(int idAtividade, Projeto projetoAssociado, Investigador investigadorResponsavel,
                      String tipoAtividade, Date data, double duracao) {
@@ -69,7 +73,6 @@ public class Atividade {
     public void setDuracao(double duracao) {
         this.duracao = duracao;
     }
-
 
     public void exibirDetalhes() {
         System.out.println("Atividade ID: " + idAtividade);
