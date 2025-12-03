@@ -5,8 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.io.Serializable;  // Importar a interface Serializable
 
-public class Investigador {
+public class Investigador implements Serializable {
+
+    private static final long serialVersionUID = 1L;  // Versão da serialização, importante para compatibilidade entre versões
+
     private static int contadorID = 1;  // Contador para gerar IDs automaticamente
     private int id;
     private String nome;
