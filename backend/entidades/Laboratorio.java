@@ -1,4 +1,4 @@
-package Backend.entidades;
+package backend.entidades;
 
 import java.util.ArrayList;
 import java.util.List;

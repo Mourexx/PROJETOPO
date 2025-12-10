@@ -1,10 +1,10 @@
-package Backend.entidades;
+package backend.entidades;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;  // Importar a interface Serializable
+import java.util.regex.Pattern;
+import java.io.Serializable;  // Importar a interface Serializable
 
 public class Investigador implements Serializable {
 

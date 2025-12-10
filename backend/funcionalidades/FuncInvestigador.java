@@ -50,9 +50,9 @@ public class FuncInvestigador {
     // ==============================================================
 
     /** Lista os projetos em que o investigador participa */
-    public int listarProjetos(Investigador inv) {
+    public List<Projeto> listarProjetos(Investigador inv) {
         if (inv == null) return new ArrayList<>();
-        return inv.getNumeroProjetos();
+        return inv.getProjetos();
     }
 
     /** Lista as atividades do investigador em todos os projetos */
@@ -100,7 +100,7 @@ public class FuncInvestigador {
 
         if (inv == null) return labs;
 
-        for (Projeto p : inv.getNumeroProjetos()) {
+        for (Projeto p : inv.getProjetos()) {
             for (Laboratorio lab : p.getLaboratoriosEnvolvidos()) {
                 if (!labs.contains(lab)) {
                     labs.add(lab);

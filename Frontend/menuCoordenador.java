@@ -12,14 +12,14 @@ import backend.entidades.Projeto;
 import backend.funcionalidades.FuncCoordenador;
 import backend.funcionalidades.GestaoSistema;
 
-public class menuCoordenador {
+public class MenuCoordenador {
 
     private GestaoSistema sistema;
     private FuncCoordenador funcCoord;
     private Coordenador coordenador;
     private Scanner scanner = new Scanner(System.in);
 
-    public menuCoordenador(GestaoSistema sistema, FuncCoordenador funcCoord, Coordenador coordenador) {
+    public MenuCoordenador(GestaoSistema sistema, FuncCoordenador funcCoord, Coordenador coordenador) {
         this.sistema = sistema;
         this.funcCoord = funcCoord;
         this.coordenador = coordenador;
