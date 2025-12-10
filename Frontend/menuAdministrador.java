@@ -1,4 +1,4 @@
-
+package Frontend;
 
 import java.util.Scanner;
 
@@ -116,7 +116,7 @@ public class menuAdministrador {
         System.out.print("Localização: ");
         String localizacao = scanner.nextLine();
 
-        Laboratorio lab = funcAdmin.registarLaboratorio(nome, localizacao);
+        Laboratorio lab = funcAdmin.criarLaboratorio(nome, localizacao);
 
         if (lab != null) System.out.println("Laboratório criado com sucesso!");
         else System.out.println("Erro ao criar laboratório.");
@@ -137,7 +137,7 @@ public class menuAdministrador {
         System.out.print("ID do coordenador responsável: ");
         int idCoord = Integer.parseInt(scanner.nextLine());
 
-        Projeto p = funcAdmin.registarProjeto(titulo, area, idCoord);
+        Projeto p = funcAdmin.criarProjeto(titulo, area, idCoord);
 
         if (p != null) System.out.println("Projeto criado com sucesso!");
         else System.out.println("Erro ao criar projeto.");
