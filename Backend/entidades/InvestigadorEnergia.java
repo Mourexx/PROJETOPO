@@ -1,4 +1,4 @@
-package backend.entidades;
+package Backend.entidades;
 
 public class InvestigadorEnergia extends Investigador {
 

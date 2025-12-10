@@ -1,4 +1,4 @@
-package backend.entidades;
+package Backend.entidades;
 
 import java.io.Serializable;
 import java.util.ArrayList;
