@@ -1,4 +1,4 @@
-package Backend.entidades;
+package backend.entidades;
 
 public class Coordenador extends Utilizador {
 

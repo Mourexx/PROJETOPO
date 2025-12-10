@@ -1,4 +1,4 @@
-package Backend.entidades;
+package backend.entidades;
 
 import java.io.Serializable;
 
