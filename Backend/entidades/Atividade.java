@@ -1,9 +1,7 @@
-package Atividade;
+package backend.entidades;
 
 import java.io.Serializable;
 import java.util.Date;
-import Projeto.Projeto;
-import Investigador.Investigador;
 
 public class Atividade implements Serializable {
 
@@ -76,7 +74,7 @@ public class Atividade implements Serializable {
 
     public void exibirDetalhes() {
         System.out.println("Atividade ID: " + idAtividade);
-        System.out.println("Projeto: " + projetoAssociado.getTitulo());
+        System.out.println("Projeto: " + projetoAssociado.getTituloProjeto());
         System.out.println("Investigador: " + investigadorResponsavel.getNomeCompleto());
         System.out.println("Tipo de Atividade: " + tipoAtividade);
         System.out.println("Data: " + data.toString());

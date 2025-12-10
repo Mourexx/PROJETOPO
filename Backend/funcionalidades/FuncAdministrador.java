@@ -1,145 +1,129 @@
-package Backend.funcionalidades;
+package backend.funcionalidades;
 
 import java.util.List;
 
-import Investigador.Investigador;
-import Laboratorio.Laboratorio;
-import Projeto.Projeto;
-import Cordenador.Coordenador;
-import Administrador.Administrador;
+import backend.entidades.Administrador;
+import backend.entidades.Coordenador;
+import backend.entidades.Investigador;
+import backend.entidades.Laboratorio;
+import backend.entidades.Projeto;
 
-/**
- * Funcionalidades disponíveis para um Administrador (PARTE 1 — FuncAdministrador)
- * Usa o GestaoSistema para fazer o trabalho “pesado”.
- */
 public class FuncAdministrador {
 
     private GestaoSistema sistema;
 
-    // ==============================================
-    //  CONSTRUTOR
-    // ==============================================
     public FuncAdministrador(GestaoSistema sistema) {
         this.sistema = sistema;
     }
 
-    // ==============================================
-    //  CRIAÇÃO / REGISTO DE ENTIDADES
-    // ==============================================
+    // ============================================================
+    // CRIAÇÃO DE UTILIZADORES E ENTIDADES
+    // ============================================================
 
-    public Administrador registarAdministrador(int id, String nome, String email) {
-        return sistema.criarAdministrador(id, nome, email);
+    public Administrador criarAdministrador(String nome, String email, String password) {
+        Administrador admin = new Administrador(nome, email, password);
+        sistema.adicionarAdministrador(admin);
+        return admin;
     }
 
-    public Coordenador registarCoordenador(int id, String nome, String email) {
-        return sistema.criarCoordenador(id, nome, email);
+    public Coordenador criarCoordenador(String nome, String email, String password) {
+        Coordenador coord = new Coordenador(nome, email, password);
+        sistema.adicionarCoordenador(coord);
+        return coord;
     }
 
-    public Investigador registarInvestigador(String nome, String email, String area) {
-        return sistema.criarInvestigador(nome, email, area);
+    public Laboratorio criarLaboratorio(String nome, String localizacao) {
+        Laboratorio lab = new Laboratorio(nome, localizacao);
+        sistema.adicionarLaboratorio(lab);
+        return lab;
     }
 
-    public Laboratorio registarLaboratorio(String nome, String localizacao) {
-        return sistema.criarLaboratorio(nome, localizacao);
+    public Projeto criarProjeto(String titulo, String area, int idCoordenador) {
+        Coordenador coord = sistema.getCoordenadorPorId(idCoordenador);
+        if (coord == null) return null;
+
+        Projeto p = new Projeto(titulo, area, coord);
+        sistema.adicionarProjeto(p);
+        return p;
     }
 
-    public Projeto registarProjeto(String titulo, String area, int idCoordenador) {
-        Coordenador coord = null;
-        // procurar coordenador pelo id na lista de coordenadores
-        for (Coordenador c : sistema.listarCoordenadores()) {
-            if (c.getId() == idCoordenador) {
-                coord = c;
-                break;
-            }
-        }
-        return sistema.criarProjeto(titulo, area, coord);
+    // ============================================================
+    // REMOÇÕES
+    // ============================================================
+
+    public boolean removerLaboratorio(int id) {
+        return sistema.removerLaboratorio(id);
     }
 
-    // ==============================================
-    //  REMOÇÃO DE ENTIDADES
-    // ==============================================
-
-    public boolean removerInvestigador(int idInvestigador) {
-        return sistema.removerInvestigador(idInvestigador);
+    public boolean removerCoordenador(int id) {
+        return sistema.removerCoordenador(id);
     }
 
-    public boolean removerCoordenador(int idCoordenador) {
-        return sistema.removerCoordenador(idCoordenador);
+    public boolean removerProjeto(int id) {
+        return sistema.removerProjeto(id);
     }
 
-    public boolean removerLaboratorio(int idLaboratorio) {
-        return sistema.removerLaboratorio(idLaboratorio);
+    public boolean removerInvestigador(int id) {
+        return sistema.removerInvestigador(id);
     }
 
-    public boolean removerProjeto(int idProjeto) {
-        return sistema.removerProjeto(idProjeto);
+    // ============================================================
+    // ASSOCIAÇÕES
+    // ============================================================
+
+    public boolean associarInvestigadorLaboratorio(int idLab, int idInv) {
+        Laboratorio lab = sistema.getLaboratorioPorId(idLab);
+        Investigador inv = sistema.getInvestigadorPorId(idInv);
+        return sistema.associarInvestigadorLaboratorio(lab, inv);
     }
 
-    // ==============================================
-    //  ASSOCIAÇÕES / GESTÃO
-    // ==============================================
-
-    /** Associa um investigador a um laboratório, usando os IDs. */
-    public boolean associarInvestigadorLaboratorio(int idLaboratorio, int idInvestigador) {
-        Laboratorio lab = sistema.getLaboratorioPorId(idLaboratorio);
-        Investigador inv = sistema.getInvestigadorPorId(idInvestigador);
-        return sistema.adicionarInvestigadorLaboratorio(lab, inv);
-    }
-
-    /** Associa um investigador a um projeto. */
-    public boolean associarInvestigadorProjeto(int idProjeto, int idInvestigador) {
+    public boolean associarInvestigadorProjeto(int idProjeto, int idInv) {
         Projeto p = sistema.getProjetoPorId(idProjeto);
-        Investigador inv = sistema.getInvestigadorPorId(idInvestigador);
-        return sistema.adicionarInvestigadorProjeto(p, inv);
+        Investigador inv = sistema.getInvestigadorPorId(idInv);
+        return sistema.associarInvestigadorProjeto(p, inv);
     }
 
-    /** Remove um investigador de um projeto. */
-    public boolean removerInvestigadorDeProjeto(int idProjeto, int idInvestigador) {
+    public boolean associarLaboratorioProjeto(int idProjeto, int idLab) {
         Projeto p = sistema.getProjetoPorId(idProjeto);
-        Investigador inv = sistema.getInvestigadorPorId(idInvestigador);
-        return sistema.removerInvestigadorProjeto(p, inv);
+        Laboratorio lab = sistema.getLaboratorioPorId(idLab);
+        return sistema.associarLaboratorioProjeto(p, lab);
     }
 
-    /** Associa um laboratório a um projeto. */
-    public boolean associarLaboratorioProjeto(int idProjeto, int idLaboratorio) {
-        Projeto p = sistema.getProjetoPorId(idProjeto);
-        Laboratorio lab = sistema.getLaboratorioPorId(idLaboratorio);
-        return sistema.adicionarLaboratorioProjeto(p, lab);
-    }
-
-    /** Atualiza o estado de um projeto (ex: "Ativo", "Concluído", "Cancelado"). */
     public boolean alterarEstadoProjeto(int idProjeto, String novoEstado) {
         Projeto p = sistema.getProjetoPorId(idProjeto);
-        return sistema.atualizarEstadoProjeto(p, novoEstado);
+        if (p == null) return false;
+
+        p.setEstadoProjeto(novoEstado);
+        return true;
     }
 
-    // ==============================================
-    //  LISTAGENS (para o menu de admin usar)
-    // ==============================================
+    // ============================================================
+    // LISTAGENS
+    // ============================================================
 
-    public List<Investigador> verTodosInvestigadores() {
-        return sistema.listarInvestigadores();
-    }
-
-    public List<Coordenador> verTodosCoordenadores() {
-        return sistema.listarCoordenadores();
-    }
-
-    public List<Administrador> verTodosAdministradores() {
+    public List<Administrador> listarAdministradores() {
         return sistema.listarAdministradores();
     }
 
-    public List<Laboratorio> verTodosLaboratorios() {
+    public List<Coordenador> listarCoordenadores() {
+        return sistema.listarCoordenadores();
+    }
+
+    public List<Laboratorio> listarLaboratorios() {
         return sistema.listarLaboratorios();
     }
 
-    public List<Projeto> verTodosProjetos() {
+    public List<Projeto> listarProjetos() {
         return sistema.listarProjetos();
     }
 
-    // ==============================================
-    //  CONSULTAS POR ID (apoio ao front-end)
-    // ==============================================
+    public List<Investigador> listarInvestigadores() {
+        return sistema.listarInvestigadores();
+    }
+
+    // ============================================================
+    // CONSULTAS
+    // ============================================================
 
     public Investigador procurarInvestigadorPorId(int id) {
         return sistema.getInvestigadorPorId(id);

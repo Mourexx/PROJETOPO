@@ -1,213 +1,239 @@
+package Frontend;
+
 import java.util.Scanner;
+import java.util.List;
+
+import backend.entidades.Atividade;
+import backend.entidades.Coordenador;
+import backend.entidades.Investigador;
+import backend.entidades.Laboratorio;
+import backend.entidades.Projeto;
+
+import backend.funcionalidades.FuncCoordenador;
+import backend.funcionalidades.GestaoSistema;
 
 public class MenuCoordenador {
 
-    private GestaoSistema sistema;  // Sistema onde estão as funcionalidades
-    private Coordenador coordenadorAutenticado;  // Coordenador autenticado no sistema
+    private GestaoSistema sistema;
+    private FuncCoordenador funcCoord;
+    private Coordenador coordenador;
+    private Scanner scanner = new Scanner(System.in);
 
-    public MenuCoordenador(GestaoSistema sistema) {
+    public MenuCoordenador(GestaoSistema sistema, FuncCoordenador funcCoord, Coordenador coordenador) {
         this.sistema = sistema;
+        this.funcCoord = funcCoord;
+        this.coordenador = coordenador;
     }
 
-    // Método para autenticar coordenador
-    public void autenticarCoordenador() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Digite o email do coordenador:");
-        String email = scanner.nextLine();
-        
-        coordenadorAutenticado = sistema.autenticarCoordenador(email);
+    public void mostrar() {
 
-        if (coordenadorAutenticado == null) {
-            System.out.println("Coordenador não encontrado ou email incorreto.");
-        } else {
-            System.out.println("Coordenador " + coordenadorAutenticado.getNome() + " autenticado com sucesso.");
+        while (true) {
+            System.out.println("\n===== MENU DO COORDENADOR =====");
+            System.out.println("1. Criar Projeto");
+            System.out.println("2. Listar Meus Projetos");
+            System.out.println("3. Adicionar Investigador a Projeto");
+            System.out.println("4. Remover Investigador de Projeto");
+            System.out.println("5. Associar Laboratório a Projeto");
+            System.out.println("6. Atualizar Estado de Projeto");
+            System.out.println("7. Listar Equipa de um Projeto");
+            System.out.println("8. Listar Laboratórios de um Projeto");
+            System.out.println("0. Voltar");
+            System.out.print("Escolha: ");
+
+            String op = scanner.nextLine();
+
+            switch (op) {
+                case "1": criarProjeto(); break;
+                case "2": listarMeusProjetos(); break;
+                case "3": adicionarInvestigadorProjeto(); break;
+                case "4": removerInvestigadorProjeto(); break;
+                case "5": associarLaboratorioProjeto(); break;
+                case "6": atualizarEstadoProjeto(); break;
+                case "7": listarEquipaProjeto(); break;
+                case "8": listarLaboratoriosProjeto(); break;
+                case "0": return;
+
+                default:
+                    System.out.println("Opção inválida.");
+            }
         }
     }
 
-    // Menu principal
-    public void exibirMenu() {
-        if (coordenadorAutenticado == null) {
-            System.out.println("Nenhum coordenador autenticado. Por favor, faça login.");
+    // ============================================================
+    //  1. Criar projeto
+    // ============================================================
+
+    private void criarProjeto() {
+        System.out.print("Título do projeto: ");
+        String titulo = scanner.nextLine();
+
+        System.out.print("Área científica: ");
+        String area = scanner.nextLine();
+
+        Projeto p = funcCoord.criarProjeto(coordenador, titulo, area);
+
+        if (p != null)
+            System.out.println("Projeto criado com sucesso!");
+        else
+            System.out.println("Erro ao criar projeto.");
+    }
+
+    // ============================================================
+    //  2. Listar projetos do coordenador
+    // ============================================================
+
+    private void listarMeusProjetos() {
+        List<Projeto> lista = funcCoord.listarProjetosDoCoordenador(coordenador);
+
+        System.out.println("\n--- Projetos sob sua coordenação ---");
+        for (Projeto p : lista) {
+            System.out.println(p);
+        }
+    }
+
+    // ============================================================
+    //  3. Adicionar investigador a projeto
+    // ============================================================
+
+    private void adicionarInvestigadorProjeto() {
+        listarMeusProjetos();
+
+        System.out.print("\nID do projeto: ");
+        int idProjeto = Integer.parseInt(scanner.nextLine());
+
+        System.out.println("\n--- Investigadores disponíveis ---");
+        for (Investigador inv : sistema.listarInvestigadores()) {
+            System.out.println(inv.getId() + " - " + inv.getNome());
+        }
+
+        System.out.print("ID do investigador: ");
+        int idInv = Integer.parseInt(scanner.nextLine());
+
+        if (funcCoord.adicionarInvestigadorProjeto(coordenador, idProjeto, idInv))
+            System.out.println("Investigador associado com sucesso!");
+        else
+            System.out.println("Erro ao associar investigador.");
+    }
+
+    // ============================================================
+    //  4. Remover investigador de projeto
+    // ============================================================
+
+    private void removerInvestigadorProjeto() {
+        listarMeusProjetos();
+
+        System.out.print("\nID do projeto: ");
+        int idProjeto = Integer.parseInt(scanner.nextLine());
+
+        Projeto projeto = sistema.getProjetoPorId(idProjeto);
+
+        if (projeto == null || !projeto.getCoordenador().equals(coordenador)) {
+            System.out.println("Não tem permissão para editar este projeto.");
             return;
         }
 
-        Scanner scanner = new Scanner(System.in);
+        System.out.println("\n--- Equipa atual ---");
+        for (Investigador inv : projeto.getEquipaInvestigadores()) {
+            System.out.println(inv.getId() + " - " + inv.getNome());
+        }
 
-        while (true) {
-            System.out.println("\n==== MENU COORDENADOR ====");
-            System.out.println("1 - Criar Projeto");
-            System.out.println("2 - Adicionar Investigador ao Projeto");
-            System.out.println("3 - Remover Investigador do Projeto");
-            System.out.println("4 - Registar Atividade");
-            System.out.println("5 - Atualizar Estado do Projeto");
-            System.out.println("6 - Listar Projetos do Coordenador");
-            System.out.println("7 - Sair");
-            System.out.print("Escolha uma opção: ");
-            
-            int opcao = scanner.nextInt();
-            scanner.nextLine();  // Limpar o buffer de entrada
+        System.out.print("ID do investigador a remover: ");
+        int idInv = Integer.parseInt(scanner.nextLine());
 
-            switch (opcao) {
-                case 1:
-                    criarProjeto(scanner);
-                    break;
-                case 2:
-                    adicionarInvestigadorAoProjeto(scanner);
-                    break;
-                case 3:
-                    removerInvestigadorDoProjeto(scanner);
-                    break;
-                case 4:
-                    registarAtividade(scanner);
-                    break;
-                case 5:
-                    atualizarEstadoProjeto(scanner);
-                    break;
-                case 6:
-                    listarProjetosDoCoordenador();
-                    break;
-                case 7:
-                    System.out.println("Saindo...");
-                    return;  // Sai do menu
-                default:
-                    System.out.println("Opção inválida, tente novamente.");
-            }
+        if (funcCoord.removerInvestigadorProjeto(coordenador, idProjeto, idInv))
+            System.out.println("Investigador removido!");
+        else
+            System.out.println("Erro ao remover investigador.");
+    }
+
+    // ============================================================
+    //  5. Associar laboratório a projeto
+    // ============================================================
+
+    private void associarLaboratorioProjeto() {
+        listarMeusProjetos();
+
+        System.out.print("\nID do projeto: ");
+        int idProjeto = Integer.parseInt(scanner.nextLine());
+
+        System.out.println("\n--- Laboratórios disponíveis ---");
+        for (Laboratorio lab : sistema.listarLaboratorios()) {
+            System.out.println(lab.getId() + " - " + lab.getNome());
+        }
+
+        System.out.print("ID do laboratório: ");
+        int idLab = Integer.parseInt(scanner.nextLine());
+
+        if (funcCoord.adicionarLaboratorioProjeto(coordenador, idProjeto, idLab))
+            System.out.println("Laboratório associado com sucesso!");
+        else
+            System.out.println("Erro ao associar laboratório.");
+    }
+
+    // ============================================================
+    //  6. Atualizar estado de projeto
+    // ============================================================
+
+    private void atualizarEstadoProjeto() {
+        listarMeusProjetos();
+
+        System.out.print("\nID do projeto: ");
+        int idProjeto = Integer.parseInt(scanner.nextLine());
+
+        System.out.print("Novo estado (Em Curso / Concluído / Suspenso): ");
+        String estado = scanner.nextLine();
+
+        if (funcCoord.atualizarEstadoProjeto(coordenador, idProjeto, estado))
+            System.out.println("Estado atualizado!");
+        else
+            System.out.println("Erro: não autorizado ou ID inválido.");
+    }
+
+    // ============================================================
+    //  7. Listar equipa de um projeto
+    // ============================================================
+
+    private void listarEquipaProjeto() {
+
+        listarMeusProjetos();
+
+        System.out.print("\nID do projeto: ");
+        int idProjeto = Integer.parseInt(scanner.nextLine());
+
+        Projeto p = sistema.getProjetoPorId(idProjeto);
+
+        if (p == null || !p.getCoordenador().equals(coordenador)) {
+            System.out.println("Não tem permissão para ver este projeto.");
+            return;
+        }
+
+        System.out.println("\n--- Equipa do Projeto ---");
+        for (Investigador inv : p.getEquipaInvestigadores()) {
+            System.out.println(inv.getId() + " - " + inv.getNome());
         }
     }
 
-    // Criar um projeto
-    private void criarProjeto(Scanner scanner) {
-        System.out.println("Digite o título do projeto:");
-        String titulo = scanner.nextLine();
-        
-        System.out.println("Digite a área do projeto (Biotecnologia, Robótica, Energia):");
-        String area = scanner.nextLine();
+    // ============================================================
+    //  8. Listar laboratórios associados a um projeto
+    // ============================================================
 
-        Projeto projeto = sistema.criarProjetoComoCoordenador(coordenadorAutenticado, titulo, area);
-        if (projeto != null) {
-            System.out.println("Projeto '" + titulo + "' criado com sucesso.");
-        } else {
-            System.out.println("Erro ao criar o projeto.");
+    private void listarLaboratoriosProjeto() {
+
+        listarMeusProjetos();
+
+        System.out.print("\nID do projeto: ");
+        int idProjeto = Integer.parseInt(scanner.nextLine());
+
+        Projeto p = sistema.getProjetoPorId(idProjeto);
+
+        if (p == null || !p.getCoordenador().equals(coordenador)) {
+            System.out.println("Não tem permissão!");
+            return;
         }
-    }
 
-    // Adicionar investigador ao projeto
-    private void adicionarInvestigadorAoProjeto(Scanner scanner) {
-        System.out.println("Digite o ID do projeto:");
-        int idProjeto = scanner.nextInt();
-        scanner.nextLine();  // Limpar o buffer de entrada
-        
-        System.out.println("Digite o ID do investigador:");
-        int idInvestigador = scanner.nextInt();
-        scanner.nextLine();  // Limpar o buffer de entrada
-        
-        Projeto projeto = sistema.getProjetoPorId(idProjeto);
-        Investigador investigador = sistema.getInvestigadorPorId(idInvestigador);
-        
-        if (projeto != null && investigador != null) {
-            boolean sucesso = sistema.coordenadorAdicionarInvestigadorProjeto(coordenadorAutenticado, projeto, investigador);
-            if (sucesso) {
-                System.out.println("Investigador adicionado ao projeto com sucesso.");
-            } else {
-                System.out.println("Erro ao adicionar o investigador ao projeto.");
-            }
-        } else {
-            System.out.println("Projeto ou Investigador não encontrado.");
-        }
-    }
-
-    // Remover investigador do projeto
-    private void removerInvestigadorDoProjeto(Scanner scanner) {
-        System.out.println("Digite o ID do projeto:");
-        int idProjeto = scanner.nextInt();
-        scanner.nextLine();  // Limpar o buffer de entrada
-        
-        System.out.println("Digite o ID do investigador:");
-        int idInvestigador = scanner.nextInt();
-        scanner.nextLine();  // Limpar o buffer de entrada
-        
-        Projeto projeto = sistema.getProjetoPorId(idProjeto);
-        Investigador investigador = sistema.getInvestigadorPorId(idInvestigador);
-        
-        if (projeto != null && investigador != null) {
-            boolean sucesso = sistema.coordenadorRemoverInvestigadorProjeto(coordenadorAutenticado, projeto, investigador);
-            if (sucesso) {
-                System.out.println("Investigador removido do projeto com sucesso.");
-            } else {
-                System.out.println("Erro ao remover o investigador do projeto.");
-            }
-        } else {
-            System.out.println("Projeto ou Investigador não encontrado.");
-        }
-    }
-
-    // Registar atividade de investigador
-    private void registarAtividade(Scanner scanner) {
-        System.out.println("Digite o ID do projeto:");
-        int idProjeto = scanner.nextInt();
-        scanner.nextLine();  // Limpar o buffer de entrada
-        
-        System.out.println("Digite o ID do investigador:");
-        int idInvestigador = scanner.nextInt();
-        scanner.nextLine();  // Limpar o buffer de entrada
-        
-        System.out.println("Digite o tipo de atividade:");
-        String tipoAtividade = scanner.nextLine();
-        
-        System.out.println("Digite a data da atividade (yyyy-mm-dd):");
-        String dataStr = scanner.nextLine();
-        LocalDate data = LocalDate.parse(dataStr);
-        
-        System.out.println("Digite a duração da atividade (em horas):");
-        double duracaoHoras = scanner.nextDouble();
-        
-        Projeto projeto = sistema.getProjetoPorId(idProjeto);
-        Investigador investigador = sistema.getInvestigadorPorId(idInvestigador);
-        
-        if (projeto != null && investigador != null) {
-            Atividade atividade = sistema.coordenadorRegistarAtividade(coordenadorAutenticado, projeto, investigador, tipoAtividade, data, duracaoHoras);
-            if (atividade != null) {
-                System.out.println("Atividade registrada com sucesso.");
-            } else {
-                System.out.println("Erro ao registrar a atividade.");
-            }
-        } else {
-            System.out.println("Projeto ou Investigador não encontrado.");
-        }
-    }
-
-    // Atualizar estado do projeto
-    private void atualizarEstadoProjeto(Scanner scanner) {
-        System.out.println("Digite o ID do projeto:");
-        int idProjeto = scanner.nextInt();
-        scanner.nextLine();  // Limpar o buffer de entrada
-        
-        System.out.println("Digite o novo estado do projeto (em curso, concluído, suspenso):");
-        String novoEstado = scanner.nextLine();
-        
-        Projeto projeto = sistema.getProjetoPorId(idProjeto);
-        
-        if (projeto != null) {
-            boolean sucesso = sistema.coordenadorAtualizarEstadoProjeto(coordenadorAutenticado, projeto, novoEstado);
-            if (sucesso) {
-                System.out.println("Estado do projeto atualizado com sucesso.");
-            } else {
-                System.out.println("Erro ao atualizar o estado do projeto.");
-            }
-        } else {
-            System.out.println("Projeto não encontrado.");
-        }
-    }
-
-    // Listar projetos do coordenador
-    private void listarProjetosDoCoordenador() {
-        if (coordenadorAutenticado != null) {
-            System.out.println("Projetos geridos por " + coordenadorAutenticado.getNome() + ":");
-            for (Projeto p : sistema.listarProjetosDoCoordenador(coordenadorAutenticado)) {
-                System.out.println("ID: " + p.getId() + " | Título: " + p.getTitulo());
-            }
-        } else {
-            System.out.println("Nenhum coordenador autenticado.");
+        System.out.println("\n--- Laboratórios associados ---");
+        for (Laboratorio lab : p.getLaboratoriosEnvolvidos()) {
+            System.out.println(lab.getId() + " - " + lab.getNome());
         }
     }
 }

@@ -1,8 +1,7 @@
-package Laboratorio;
+package backend.entidades;
 
 import java.util.ArrayList;
 import java.util.List;
-import Investigador.Investigador;
 
 
 public class Laboratorio {

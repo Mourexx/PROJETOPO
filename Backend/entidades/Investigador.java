@@ -1,6 +1,5 @@
-package Investigador;
+package backend.entidades;
 
-import Projeto.Projeto;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -148,7 +147,7 @@ public class Investigador implements Serializable {
             System.out.println("O investigador não está participando de nenhum projeto.");
         } else {
             for (Projeto p : projetos) {
-                System.out.println("Projeto: " + p.getTitulo());
+                System.out.println("Projeto: " + p.getTituloProjeto());
             }
         }
     }
@@ -169,5 +168,15 @@ public class Investigador implements Serializable {
         System.out.println("Número de Projetos: " + numeroProjetos);
         System.out.println("Total de Horas Dedicadas: " + totalHorasDedicadas);
         System.out.println("Número de Atividades: " + numeroAtividades);
+    }
+
+    public String getNomeCompleto() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getNomeCompleto'");
+    }
+
+    public String getInfoEspecifica() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getInfoEspecifica'");
     }
 }

@@ -1,4 +1,4 @@
-package Administrador;
+package backend.entidades;
 
 import java.io.Serializable;
 

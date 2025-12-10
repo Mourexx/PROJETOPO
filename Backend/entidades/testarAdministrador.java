@@ -1,4 +1,4 @@
-package Administrador;
+package backend.entidades;
 
 // IMPORTA a classe Administrador se ela estiver no mesmo package, não precisas importar
 // Caso esteja noutro package, avisa-me para adaptar

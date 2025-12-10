@@ -1,4 +1,4 @@
-package Projeto;
+package backend.entidades;
 
 public class testarProjeto {
 
