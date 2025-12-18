@@ -2,12 +2,12 @@ package backend.entidades;
 
 public class InvestigadorRobotica extends Investigador {
 
-    private String tipoSistema;
+    private static final long serialVersionUID = 1L;
 
-    public InvestigadorRobotica(String nome, String email, String password,
-                                Laboratorio lab, String tipoSistema) {
+    private final String tipoSistema;
 
-        super(nome, email, password);
+    public InvestigadorRobotica(String nome, String email, String tipoSistema) {
+        super(nome, email, "Robótica");
         this.tipoSistema = tipoSistema;
     }
 
@@ -16,3 +16,6 @@ public class InvestigadorRobotica extends Investigador {
         return "Tipo de sistema trabalhado: " + tipoSistema;
     }
 }
+
+
+

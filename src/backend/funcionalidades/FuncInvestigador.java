@@ -5,20 +5,16 @@ import java.util.List;
 
 import backend.entidades.Atividade;
 import backend.entidades.Investigador;
-import backend.entidades.Projeto;
 import backend.entidades.Laboratorio;
+import backend.entidades.Projeto;
 
 public class FuncInvestigador {
 
-    private GestaoSistema sistema;
+    private final GestaoSistema sistema;
 
     public FuncInvestigador(GestaoSistema sistema) {
         this.sistema = sistema;
     }
-
-    // ==============================================================
-    //  AUTENTICAÇÃO DO INVESTIGADOR
-    // ==============================================================
 
     public Investigador autenticar(String email, String password) {
         for (Investigador inv : sistema.listarInvestigadores()) {
@@ -26,12 +22,8 @@ public class FuncInvestigador {
                 return inv;
             }
         }
-        return null; 
+        return null;
     }
-
-    // ==============================================================
-    //  PERFIL DO INVESTIGADOR
-    // ==============================================================
 
     public boolean editarNome(Investigador inv, String novoNome) {
         if (inv == null || novoNome == null || novoNome.isBlank()) return false;
@@ -45,20 +37,13 @@ public class FuncInvestigador {
         return true;
     }
 
-    // ==============================================================
-    //  CONSULTAS DE PROJETOS
-    // ==============================================================
-
-    /** Lista os projetos em que o investigador participa */
     public List<Projeto> listarProjetos(Investigador inv) {
         if (inv == null) return new ArrayList<>();
         return inv.getProjetos();
     }
 
-    /** Lista as atividades do investigador em todos os projetos */
     public List<Atividade> listarAtividadesDoInvestigador(Investigador inv) {
         List<Atividade> resultado = new ArrayList<>();
-
         if (inv == null) return resultado;
 
         for (Projeto p : sistema.listarProjetos()) {
@@ -68,57 +53,35 @@ public class FuncInvestigador {
                 }
             }
         }
-
         return resultado;
     }
 
-    // ==============================================================
-    //  ESTATÍSTICAS DO INVESTIGADOR
-    // ==============================================================
-
     public int obterNumeroProjetos(Investigador inv) {
-        if (inv == null) return 0;
-        return inv.getNumeroProjetos();
+        return (inv == null) ? 0 : inv.getNumeroProjetos();
     }
 
     public int obterNumeroAtividades(Investigador inv) {
-        if (inv == null) return 0;
-        return inv.getNumeroAtividades();
+        return (inv == null) ? 0 : inv.getNumeroAtividades();
     }
 
     public double obterTotalHoras(Investigador inv) {
-        if (inv == null) return 0;
-        return inv.getTotalHoras();
+        return (inv == null) ? 0.0 : inv.getTotalHoras();
     }
-
-    // ==============================================================
-    //  CONSULTAR LABORATÓRIOS ASSOCIADOS AOS SEUS PROJETOS
-    // ==============================================================
 
     public List<Laboratorio> listarLaboratoriosDoInvestigador(Investigador inv) {
         List<Laboratorio> labs = new ArrayList<>();
-
         if (inv == null) return labs;
 
         for (Projeto p : inv.getProjetos()) {
             for (Laboratorio lab : p.getLaboratoriosEnvolvidos()) {
-                if (!labs.contains(lab)) {
-                    labs.add(lab);
-                }
+                if (!labs.contains(lab)) labs.add(lab);
             }
         }
-
         return labs;
     }
-
-    // ==============================================================
-    //  VERIFICAR SE INVESTIGADOR PERTENCE A PROJETO
-    // ==============================================================
 
     public boolean pertenceAoProjeto(Investigador inv, Projeto p) {
         if (inv == null || p == null) return false;
         return p.getEquipaInvestigadores().contains(inv);
     }
 }
-
-

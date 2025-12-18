@@ -2,12 +2,12 @@ package backend.entidades;
 
 public class InvestigadorEnergia extends Investigador {
 
-    private String fonteEnergetica;
+    private static final long serialVersionUID = 1L;
 
-    public InvestigadorEnergia(String nome, String email, String password,
-                               Laboratorio lab, String fonteEnergetica) {
+    private final String fonteEnergetica;
 
-        super(nome, email, password);
+    public InvestigadorEnergia(String nome, String email, String fonteEnergetica) {
+        super(nome, email, "Energia");
         this.fonteEnergetica = fonteEnergetica;
     }
 
@@ -16,3 +16,4 @@ public class InvestigadorEnergia extends Investigador {
         return "Fonte energética estudada: " + fonteEnergetica;
     }
 }
+

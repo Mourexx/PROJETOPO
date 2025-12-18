@@ -2,12 +2,12 @@ package backend.entidades;
 
 public class InvestigadorBiotecnologia extends Investigador {
 
-    private String areaInvestigacao;
+    private static final long serialVersionUID = 1L;
 
-    public InvestigadorBiotecnologia(String nome, String email, String password,
-                                     Laboratorio lab, String areaInvestigacao) {
+    private final String areaInvestigacao;
 
-        super(nome, email, password);
+    public InvestigadorBiotecnologia(String nome, String email, String areaInvestigacao) {
+        super(nome, email, "Biotecnologia");
         this.areaInvestigacao = areaInvestigacao;
     }
 
@@ -16,3 +16,4 @@ public class InvestigadorBiotecnologia extends Investigador {
         return "Área de investigação: " + areaInvestigacao;
     }
 }
+
